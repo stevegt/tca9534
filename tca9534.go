@@ -23,21 +23,6 @@ func (t *TCA9534) xeq(cmd, tx byte) (rx byte, err error) {
 	return
 }
 
-func (t *TCA9534) Invert(bits byte) (rx byte, err error) {
-	rx, err = t.xeq(CMD_INVERSION, bits)
-	return
-}
-
-func (t *TCA9534) Put(bits byte) (rx byte, err error) {
-	rx, err = t.xeq(CMD_OUTPUT_PORT, bits)
-	return
-}
-
-func (t *TCA9534) Get() (rx byte, err error) {
-	rx, err = t.xeq(CMD_INPUT_PORT, 0x00)
-	return
-}
-
 // Config sets pin configurations to input or output. Bit 0 is pin 0,
 // and so on.  A high bit sets the pin to output mode, and a low bit
 // sets the pin to input mode.
@@ -46,6 +31,28 @@ func (t *TCA9534) Config(conf byte) (rx byte, err error) {
 	return
 }
 
+// Invert inverts the polarity of the input pins specified with a high
+// bit in bits.
+
+func (t *TCA9534) Invert(bits byte) (rx byte, err error) {
+	rx, err = t.xeq(CMD_INVERSION, bits)
+	return
+}
+
+// Put writes all 8 bits to the corresponding pins.
+func (t *TCA9534) Put(bits byte) (rx byte, err error) {
+	rx, err = t.xeq(CMD_OUTPUT_PORT, bits)
+	return
+}
+
+// Get returns all 8 bits from the corresponding pins.
+func (t *TCA9534) Get() (rx byte, err error) {
+	rx, err = t.xeq(CMD_INPUT_PORT, 0x00)
+	return
+}
+
+// Read returns the value of pin -- works on both input and output
+// pins.
 func (t *TCA9534) Read(pin int) (bit bool, err error) {
 	bits, err := t.Get()
 	if err != nil {
@@ -58,6 +65,7 @@ func (t *TCA9534) Read(pin int) (bit bool, err error) {
 	return
 }
 
+// Write sets the value of pin.
 func (t *TCA9534) Write(pin int, bit bool) (err error) {
 	bits, err := t.Get()
 	if err != nil {
