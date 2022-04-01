@@ -33,7 +33,6 @@ func (t *TCA9534) Config(conf byte) (rx byte, err error) {
 
 // Invert inverts the polarity of the input pins specified with a high
 // bit in bits.
-
 func (t *TCA9534) Invert(bits byte) (rx byte, err error) {
 	rx, err = t.xeq(CMD_INVERSION, bits)
 	return
